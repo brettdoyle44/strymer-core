@@ -24,12 +24,29 @@ provider:
   environment:
     listenNotesEnvVar: ${env:LISTEN_NOTES_API}
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: 'arn:aws:dynamodb:us-east-2:*:*'
+
 functions:
   list:
-    handler: list.main
+    handler: routes/list.main
     events:
       - http:
           path: podcasts
-          method: post
+          method: get
+          cors: true
+          authorizer: aws_iam
+  get:
+    handler: routes/get.main
+    events:
+      - http:
+          path: podcasts/{id}
+          method: get
           cors: true
           authorizer: aws_iam
