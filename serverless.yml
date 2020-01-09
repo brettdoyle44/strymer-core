@@ -53,10 +53,10 @@ functions:
     handler: routes/listFavorites.main
     events:
       - http:
-        path: favorites
-        method: get
-        cors: true
-        authorizer: aws_iam
+          path: favorites
+          method: get
+          cors: true
+          authorizer: aws_iam
   get:
     handler: routes/get.main
     events:
