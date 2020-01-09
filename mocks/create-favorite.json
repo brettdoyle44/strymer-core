@@ -1,0 +1,8 @@
+{
+  "body": "{\"podcastId\":\"bdakjha-123123\"}",
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}

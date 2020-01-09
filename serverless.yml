@@ -10,6 +10,10 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
 
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
+
 provider:
   name: aws
   runtime: nodejs10.x
@@ -27,10 +31,13 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:GetItem
-        - dynamodb:UpdateItem
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:us-east-2:*:*'
 
 functions:
@@ -42,11 +49,27 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  listFavorites:
+    handler: routes/listFavorites.main
+    events:
+      - http:
+        path: favorites
+        method: get
+        cors: true
+        authorizer: aws_iam
   get:
     handler: routes/get.main
     events:
       - http:
           path: podcasts/{id}
           method: get
+          cors: true
+          authorizer: aws_iam
+  create:
+    handler: routes/create.main
+    events:
+      - http:
+          path: favorites
+          method: post
           cors: true
           authorizer: aws_iam
