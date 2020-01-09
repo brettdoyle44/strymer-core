@@ -4,15 +4,15 @@ import { success, failure } from '../libs/response-lib';
 export async function main(event, context) {
   const params = {
     TableName: 'podcast-favorites',
-    KeyConditionExpression: 'userId = :userId',
-    ExpressionAttributeValues: {
-      ':userId': event.requestContext.identity.cognitoIdentityId
+    Key: {
+      userId: event.requestContext.identity.cognitoIdentityId,
+      podcastId: event.pathParameters.id
     }
   };
 
   try {
-    const result = await dynamoDbLib.call('query', params);
-    return success(result.Items);
+    await dynamoDbLib.call('delete', params);
+    return success({ status: true });
   } catch (e) {
     return failure({ status: false });
   }

@@ -66,10 +66,18 @@ functions:
           cors: true
           authorizer: aws_iam
   create:
-    handler: routes/create.main
+    handler: routes/createFavorites.main
     events:
       - http:
           path: favorites
           method: post
+          cors: true
+          authorizer: aws_iam
+  delete:
+    handler: routes/deleteFavorites.main
+    events:
+      - http:
+          path: favorites/{id}
+          method: delete
           cors: true
           authorizer: aws_iam
