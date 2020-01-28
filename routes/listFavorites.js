@@ -22,8 +22,16 @@ export async function main(event, context) {
         }
       }
     });
-    console.log(batchResult);
-    return success(batchResult);
+    const batchObj = batchResult.Responses.PodcastStore.map(podcast => {
+      return {
+        podcastId: podcast.podcastId,
+        title: podcast.title,
+        author: podcast.author,
+        description: podcast.description,
+        image: podcast.image
+      };
+    });
+    return success(batchObj);
   } catch (e) {
     return failure(e);
   }
