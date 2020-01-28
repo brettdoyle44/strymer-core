@@ -12,8 +12,19 @@ export async function main(event, context) {
 
   try {
     const result = await dynamoDbLib.call('query', params);
-    return success(result.Items);
+    const mappedResult = await result.Items.map(podcast => ({
+      podcastId: podcast.podcastId
+    }));
+    const batchResult = await dynamoDbLib.call('batchGet', {
+      RequestItems: {
+        PodcastStore: {
+          Keys: [...mappedResult]
+        }
+      }
+    });
+    console.log(batchResult);
+    return success(batchResult);
   } catch (e) {
-    return failure({ status: false });
+    return failure(e);
   }
 }
