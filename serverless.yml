@@ -26,7 +26,9 @@ provider:
   # commit your .env.
   #
   environment:
-    listenNotesEnvVar: ${env:LISTEN_NOTES_API}
+    algoliaAppKeyEnvVar: ${env:ALGOLIA_APP_KEY}
+    algoliaAdminKeyEnvVar: ${env:ALGOLIA_ADMIN_KEY}
+    algoliaSearchOnlyKeyEnvVar: ${env:ALGOLIA_SEARCH_ONLY_KEY}
 
   iamRoleStatements:
     - Effect: Allow
