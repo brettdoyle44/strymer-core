@@ -1,6 +1,5 @@
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
-import algoliasearch from 'algoliasearch';
 
 export async function main(event, context) {
   const params = {
@@ -17,16 +16,6 @@ export async function main(event, context) {
           description: podcast.description,
           image: podcast.image
         };
-      });
-      const searchClient = algoliasearch(
-        process.env.algoliaAppKeyEnvVar,
-        process.env.algoliaAdminKeyEnvVar
-      );
-      const index = searchClient.initIndex('podcast-search');
-      index.addObjects(podcastObj, function(err, content) {
-        if (err) {
-          console.error(err);
-        }
       });
       return success(podcastObj);
     } else {
