@@ -17,12 +17,12 @@ export async function main(event, context) {
     }));
     const batchResult = await dynamoDbLib.call('batchGet', {
       RequestItems: {
-        PodcastStore: {
+        'podcast-table': {
           Keys: [...mappedResult]
         }
       }
     });
-    const batchObj = batchResult.Responses.PodcastStore.map(podcast => {
+    const batchObj = batchResult.Responses['podcast-table'].map(podcast => {
       return {
         podcastId: podcast.podcastId,
         title: podcast.title,

@@ -3,21 +3,12 @@ import { success, failure } from '../libs/response-lib';
 
 export async function main(event, context) {
   const params = {
-    TableName: 'PodcastStore'
+    TableName: 'podcast-table'
   };
   try {
     const result = await dynamoDbLib.call('scan', params);
     if (result.Items) {
-      const podcastObj = result.Items.map(podcast => {
-        return {
-          podcastId: podcast.podcastId,
-          title: podcast.title,
-          author: podcast.author,
-          description: podcast.description,
-          image: podcast.image
-        };
-      });
-      return success(podcastObj);
+      return success(result.Items);
     } else {
       return failure({ status: false, error: 'Item not found.' });
     }

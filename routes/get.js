@@ -2,24 +2,31 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
 
 export async function main(event, context) {
-  const params = {
-    TableName: 'PodcastStore',
+  const podcastParams = {
+    TableName: 'podcast-table',
     Key: {
       podcastId: event.pathParameters.id
     }
   };
-
-  try {
-    const result = await dynamoDbLib.call('get', params);
-    if (result.Item) {
-      return success(result.Item);
-    } else {
-      return failure({ status: false, error: 'Item not found.' });
+  const episodesParams = {
+    TableName: 'episodes-table',
+    IndexName: 'podcastId-index',
+    KeyConditionExpression: 'podcastId = :podcastId',
+    ExpressionAttributeValues: {
+      ':podcastId': event.pathParameters.id
     }
+  };
+  try {
+    const result = await dynamoDbLib.call('get', podcastParams);
+    const episodes = await dynamoDbLib.call('query', episodesParams);
+    return success({
+      ...result.Item,
+      episodes: [...episodes.Items]
+    });
   } catch (e) {
     console.error(e);
     return failure({ status: false });
   }
 }
 
-// 540a75c0-2d1b-11ea-a617-3799d21531d2
+// 0a226e90-4f53-11ea-b8a5-2b262ce724f3
