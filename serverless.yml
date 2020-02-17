@@ -44,6 +44,16 @@ provider:
       Resource: 'arn:aws:dynamodb:us-east-2:*:*'
 
 functions:
+  writePodcasts:
+    handler: jobs/writePodcasts.main
+  podcastId:
+    handler: jobs/updateEpisodes.main
+    events:
+      - http:
+          path: podcasts/podcastId
+          method: get
+          cors: true
+          authorizer: aws_iam
   list:
     handler: routes/list.main
     events:
