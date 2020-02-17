@@ -46,14 +46,10 @@ provider:
 functions:
   writePodcasts:
     handler: jobs/writePodcasts.main
-  podcastId:
+  updateEpisodes:
     handler: jobs/updateEpisodes.main
     events:
-      - http:
-          path: podcasts/podcastId
-          method: get
-          cors: true
-          authorizer: aws_iam
+      - schedule: rate(25 hours)
   list:
     handler: routes/list.main
     events:
