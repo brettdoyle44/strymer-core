@@ -66,6 +66,14 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  getFeatured:
+    handler: routes/getFeatured.main
+    events:
+      - http:
+          path: featured
+          method: get
+          cors: true
+          authorizer: aws_iam
   get:
     handler: routes/get.main
     events:
